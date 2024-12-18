@@ -1,0 +1,26 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% tailwind_css %}
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+</head>
+<body>
+    <nav class="mt-4 mx-5">
+    <ul class="list-none flex flex-row justify-between">
+        <li class="font-bold text-3xl"><a href="{% url 'index'%}">Course Platform</a></li>
+        <div class="flex flex-row gap-4">
+            <li class="text-lg"><a href="{% url 'courses' %}">Courses</a></li>
+            <li class="text-lg"><a href="">Logout</a></li>
+        </div>
+    </ul>
+    </nav>
+    {% block content %}
+    
+    {% endblock %}
+</body>
+</html>
