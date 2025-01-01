@@ -11,10 +11,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 # import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+TEMPLATE_DIR = BASE_DIR / 'templates'
 
 
 # Quick-start development settings - unsuitable for production
@@ -61,7 +63,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'templates'    
+            TEMPLATE_DIR,
+            #! TEMPLATE_DIR / 'videos' / 'snippets', # don't use this not good practice
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -136,3 +139,7 @@ TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+CLOUDINARY_CLOUD_NAME = config("CLOUDINARY_CLOUD_NAME")
+CLOUDINARY_API_KEY= config("CLOUDINARY_API_KEY"), 
+CLOUDINARY_SECRET_API_KEY= config("CLOUDINARY_SECRET_API_KEY"), # Click 'View API Keys' above to copy your API secret

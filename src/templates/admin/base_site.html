@@ -1,0 +1,10 @@
+{% extends 'admin/base_site.html' %}
+
+{% block extrahead %} {% comment %} block extrahead is from base.html in admin folder of venv{% endcomment %}
+
+    {{ block.super }} {% comment %} pehle ka maal aajaye extrahead block overwrite na ho{% endcomment %}
+
+    {% include 'base/js.html' %}
+
+{% endblock %}
+
