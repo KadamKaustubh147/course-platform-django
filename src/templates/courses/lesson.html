@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content%}
+
+<h1>{{ object.title }}</h1>
+
+{% comment %} {% include 'courses/snippets/list-display.html' with queryset=%} {% endcomment %}
+
+{{ video_embed }}
+
+{% endblock %}

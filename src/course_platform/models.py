@@ -127,6 +127,10 @@ class Course(models.Model):
     @property
     def is_published(self):
         return self.status == status.PUBLISHED
+
+    @property
+    def is_coming_soon(self):
+        return self.status == status.COMING_SOON
     
     
     # @property
@@ -242,6 +246,9 @@ class Lesson(models.Model):
             self.public_id = generate_public_id(self)
         super().save(*args, **kwargs) # ye save se pehle hai
     
+    def get_absolute_url(self):
+        return self.path
+    
     @property
     def path(self):
         course_path = self.course.path
@@ -249,7 +256,14 @@ class Lesson(models.Model):
             course_path = course_path[:-1]
         return f"{course_path}/lessons/{self.public_id}"
     
-    
+    @property
+    def is_coming_soon(self):
+        return self.status == status.COMING_SOON
+
+    @property
+    def has_video(self):
+        return self.video is not None
+
     
     class Meta:
         '''

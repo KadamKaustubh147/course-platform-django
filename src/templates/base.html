@@ -4,10 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  {% include 'base/js.html' %}
+  <title>
+  {% block head_title %}from base.html{% endblock %}
+  </title>
 </head>
 <body>
-  <h1 class="text-3xl font-bold underline">
+  {% block content %}
+    <h1 class="text-3xl font-bold underline">
     Hello world from base
   </h1>
-</body>
+  {% endblock %}
 </html>

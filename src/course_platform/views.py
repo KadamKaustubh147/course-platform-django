@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import Http404, JsonResponse
 from . import services
+import helpers
 
 
 # Create your views here.
@@ -13,11 +14,13 @@ def courses(request):
 
 def course_list_view(request):
     queryset = services.get_publish_courses()
-    print(queryset)
-    context = {}
-    return JsonResponse({
-        "data": [x.path for x in queryset]
-    })
+    # print(queryset)
+    context = {
+        "object_list": queryset
+    }
+    # return JsonResponse({
+    #     "data": [x.path for x in queryset]
+    # })
     return render(request, 'courses/list.html', context)
 
 def course_detail_view(request, course_id=None, *args, **kwargs):
@@ -25,16 +28,19 @@ def course_detail_view(request, course_id=None, *args, **kwargs):
     
     if course_obj is None:
         raise Http404
-    lesson_queryset = course_obj.lesson.all()
+    lesson_queryset = services.get_course_lessons(course_obj)
     # as related name lesson hai toh isliye lesson aaya hai nhi toh lesson_set aata
-    context = {}
-    return JsonResponse({
-        "data": course_obj.id,
-        "lessons": [x.path for x in lesson_queryset]
-    })
+    context = {
+        "object": course_obj,
+        "lessons_queryset": lesson_queryset
+    }
+    # return JsonResponse({
+    #     "data": course_obj.id,
+    #     "lessons": [x.path for x in lesson_queryset]
+    # })
     return render(request, 'courses/detail.html', context)
 
-def lesson_detail_view(request, lesson_id=None, course_id=None, *args, **kwargs):
+def lesson_detail_view(request, lesson_id, course_id, *args, **kwargs):
     lesson_obj = services.get_lesson_detail(
         course_id=course_id,
         lesson_id=lesson_id
@@ -42,8 +48,29 @@ def lesson_detail_view(request, lesson_id=None, course_id=None, *args, **kwargs)
     
     if lesson_obj is None:
         raise Http404
-    context = {}
-    return JsonResponse({
-        "data": lesson_obj.id
-    })
-    return render(request, 'courses/lesson.html', context)
+    
+    context = {
+        "object": lesson_obj
+    }
+    # return JsonResponse({
+    #     "data": lesson_obj.id
+    # })
+    
+    template_name = "courses/lesson_soon.html"
+    
+    video_embed_html = helpers.get_cloudinary_video_object(
+            lesson_obj,
+            width=1250,
+            field_name='video',
+            as_html=True,
+        )
+    
+    
+    # agar coming soon nai hai toh lesson.html aayega
+    # nai toh coming soon ka hi page default hai
+    if not lesson_obj.is_coming_soon and lesson_obj.has_video:
+        template_name = "courses/lesson.html"
+        
+        context['video_embed'] = video_embed_html
+        
+    return render(request, template_name, context)
