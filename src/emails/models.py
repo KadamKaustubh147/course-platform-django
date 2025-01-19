@@ -4,6 +4,7 @@ from django.db import models
 
 class Email(models.Model):
     email = models.EmailField(unique=True)
+    active = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True) # set at creation
     
 class EmailVerificationEvent(models.Model):
@@ -16,8 +17,9 @@ class EmailVerificationEvent(models.Model):
     Example use: If deleting a category doesn't delete the associated products but sets their category to NULL.
     
     '''
-    email = models.EmailField()
+    email = models.EmailField() # this time the email field is not unique
     # token
+    # ip address
     attempts = models.IntegerField(default=0)
     expired = models.BooleanField(default=False)
     
